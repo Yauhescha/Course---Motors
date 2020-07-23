@@ -1,0 +1,57 @@
+<html>
+<head>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title th:text="#{messages.login}">Please sign in</title>
+	<div th:replace="~{commons :: head}"></div>
+	<link	href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css"	rel="stylesheet" crossorigin="anonymous">
+	
+<style>
+select{
+width: 100%;
+margin: 10px 0px ;
+}
+</style>
+</head>
+<body onload="onLoad()">
+	<div class="container">
+		<form class="form-signin" method="post" action="/login1">
+			<h2 class="form-signin-heading" th:text="#{messages.loginPlease}">Please sign in</h2>
+			<select  th:onchange="'go(\''+@{|${#httpServletRequest.requestURI}?language=|}+'\')'" >
+				<option th:text="#{messages.language}">Language</option>
+				<option value="en">EN</option>
+				<option value="ru">RU</option>
+			</select> 
+			<p>
+				<label for="username" class="sr-only" th:text="#{messages.username}">Username</label>
+				<input type="text" id="username" name="username"
+					class="form-control" placeholder="Username" required=""
+					autofocus="">
+			</p>
+			<p>
+				<label for="password" class="sr-only" th:text="#{messages.password}">Password</label>
+				<input type="password" id="password" name="password"
+					class="form-control" placeholder="Password" required="">
+			</p>
+			<button class="btn btn-lg btn-primary btn-block" type="submit"
+				th:text="#{messages.submit}">Sign in</button>
+			<a class="btn btn-lg btn-primary btn-block"
+				th:text="#{messages.back}" href="/">Back</a>
+		</form>
+	</div>
+	<script type="text/javascript">
+	function go(url){
+		window.location.href =url+$("select").val();
+	}
+
+	function onLoad(){
+		var tem="[[#{messages.logingError}]]";
+		var url=document.location.href;
+		if(url.includes("error=true"))
+			alert(tem);
+	}
+	</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+.brand-item {
+	margin: 20px;
+}
+
+.category-item {
+	margin: 20px;
+}
+
+.product-item {
+	border: 1px solid blue;
+	margin: 20px;
+	padding: 5px;
+	width: 312px;
+}
+
+.productName {
+	font-size: 20px;
+	color: black;
+}
+
+.productList img {
+	width: 400px;
+	height: 400px;
+}
+
+.manager-item {
+	margin: 20px;
+}
+
+.item {
+	border: 1px solid blue;
+	margin: 20px;
+	padding: 5px;
+}
+
+select {
+	width: 100%;
+	margin: 10px 0px;
+}
+
+.container {
+	max-width: 90% !important;
+}
+
+nav,#navbarNavAltMarkup > div > button {
+	text-transform: uppercase;
+	font-weight: 900;
+}
+.indexShap{
+/* 	height: 150px; */
+	width: 100%;
+}
+.indexInfo{
+	top: 50%;
+    position: absolute;
+    left: -10px;
+    width: 20px;
+    padding: 5px 30px;
+    word-wrap: break-word;
+}
+.priceListCategory{
+    text-align: center;
+    font-weight: 900;
+    padding: 20px 22px;
+}
+.priceListCategory td {
+    padding: 10px;
+}
+section.productList form {
+    font-size: 25px;
+}
+.navbar-brand {
+    font-size: 31px;
+}

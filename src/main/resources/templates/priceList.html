@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title th:text="#{messages.priceList}">PriceList</title>
+	
+	<div th:replace="~{commons :: head}"></div>
+</head>
+
+<body >
+
+<div th:replace="~{commons :: nav}"></div>
+
+
+<section class="list">
+	<div class="container">
+		<h3 class="text-center"  th:text="#{messages.priceList}">PriceList</h3>
+		<div class="form">
+			<form action="/priceList" class="d-flex flex-column" method="post">
+				<div class="d-flex justify-content-center">
+					<select name="id">
+						<option th:each="category:${categories}" th:text="${category.name}" th:value="${category.id}"></option>
+					</select>
+					<button class="item btn btn-primary" th:text="#{messages.find}" style="margin: 0 0 0 30px;">Find</button>
+				</div>
+				<div class="d-flex justify-content-center mt-2">
+				</div>
+			</form>		
+		</div>
+		<div class="d-flex flex-wrap justify-content-center">
+			<table border="2" style="width: 100%" id="myTable2">
+				<tr>
+					<th onclick="sortTable(0)" th:text="#{messages.id}">
+					<th onclick="sortTable(1)" th:text="#{messages.name}">				
+					<th onclick="sortTable(2)" th:text="#{messages.quantity}">
+					<th onclick="sortTable(3)" th:text="#{messages.price}">
+				</tr>
+				<div th:each="category:${categoriesFoList}">
+					<tr  class="priceListCategory">
+						<td colspan="4" th:text="${category.name}"></td>
+					</tr>
+					<tr th:each="product:${category.product}" >
+						<td th:text="${product.id}"></td>
+						<td th:text="${product.name}"></td>
+						<td th:text="${product.quantity}"></td>
+						<td th:text="${product.price}"></td>								
+					</tr>
+				</div>
+			</table>
+			<div class="d-flex mt-3">
+				<button th:text="#{messages.print}" onclick="printMe()"></button>
+			</div>
+		
+		</div>
+	</div>
+</section>
+<script type="text/javascript">
+	function showMe(id){
+		$(".idOrder"+id).toggleClass("d-none");
+	}
+	function printMe(){
+		$('button').toggleClass("d-none");
+		$('nav').toggleClass("d-none");
+		$('.form').toggleClass("d-none");
+		window.print();
+		setTimeout(showBtn(),10000);
+	}
+	function showBtn(){
+		$('.form').toggleClass("d-none");
+		$('nav').toggleClass("d-none");
+		$('button').toggleClass("d-none");
+	}
+	function makeDate(){
+		var now = new Date();
+		var dt=now.getFullYear()+'-'+("0"+(now.getMonth()+1)).slice(-2)+'-'+("0"+(now.getDate())).slice(-2);
+		$('input#date').each( function () {
+			$(this).val(dt);
+			
+		});
+		}
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="#{messages.chart}">Chart</title>
+
+<div th:replace="~{commons :: head}"></div>
+<script src="https://www.google.com/jsapi"></script>
+<script>
+	var variables_=JSON.parse("[[${map}]]".replace(/(&quot\;)/g, "\""));
+	
+	const xah_obj_to_map = ( obj => {
+	    const mp = new Map;
+	    Object.keys ( obj ). forEach (k => { mp.set(k, obj[k]) });
+	    return mp;
+	});
+	var variables =xah_obj_to_map(variables_);
+	
+	let keys = [...variables.keys()];
+	var arrr = new Array();
+	arrr.push([ '[[#{messages.days}]]', '[[#{messages.bought}]]']);
+	for(var i=0; i<keys.length;i++)
+		arrr.push([keys[i],variables.get(keys[i])]);
+	
+	
+	
+	google.load("visualization", "1", {
+		packages : [ "corechart" ]
+	});
+	
+	
+	google.setOnLoadCallback(drawChart1);
+	function drawChart1() {
+		var data = google.visualization.arrayToDataTable(arrr);
+		var options = {
+			title : '[[#{messages.bought}]]',
+			hAxis : {
+				title : '[[#{messages.days}]]'
+			},
+			vAxis : {
+				title : '[[#{messages.count}]]'
+			}
+		};
+		var chart = new google.visualization.ColumnChart(document
+				.getElementById('oil1'));
+		chart.draw(data, options);
+	}
+	
+	
+	variables_=JSON.parse("[[${mapWeBuy}]]".replace(/(&quot\;)/g, "\""));	
+	variables =xah_obj_to_map(variables_);	
+	keys = [...variables.keys()];
+	var arrr2 = new Array();
+	arrr2.push([ '[[#{messages.days}]]', '[[#{messages.boughtMe}]]']);
+	for(var i=0; i<keys.length;i++)
+		arrr2.push([keys[i],variables.get(keys[i])]);
+	
+	google.setOnLoadCallback(drawChart2);
+	function drawChart2() {
+		var data = google.visualization.arrayToDataTable(arrr2);
+		var options = {
+			title : '[[#{messages.boughtMe}]]',
+			hAxis : {
+				title : '[[#{messages.days}]]'
+			},
+			vAxis : {
+				title : '[[#{messages.count}]]'
+			}
+		};
+		var chart2 = new google.visualization.ColumnChart(document.getElementById('oil2'));
+		chart2.draw(data, options);
+	}
+	
+	
+	
+</script>
+</head>
+
+<body>
+<div th:replace="~{commons :: nav}"></div>
+
+<section>
+	<div class="container justify-content-between d-flex">
+		<div id="oil1" style="width: 700px; height: 400px;"></div>
+		<div id="oil2" style="width: 700px; height: 400px;"></div>
+	</div>
+
+	<div class="d-flex justify-content-center">
+		<select name="id" id="select">
+			<option th:each="product:${products}" th:text="${product.name}" th:value="${product.id}"></option>
+		</select>
+		<button class="item btn btn-primary" th:text="#{messages.find}" style="margin: 0 0 0 30px;" onclick="paintGr()">Find</button>
+	</div>
+
+	<div class="container justify-content-between d-flex">
+		<div id="oil3" style="width: 700px; height: 400px;"></div>
+		<div id="oil4" style="width: 700px; height: 400px;"></div>
+	</div>
+
+
+	<button th:text="#{messages.print}" onclick="printMe(this)"></button>
+</section>
+
+
+
+<script type="text/javascript">
+	var prodanoProduct=JSON.parse("[[${mapProdanogoProduct}]]".replace(/(&quot\;)/g, "\""));
+	var requesterProduct=JSON.parse("[[${mapRequestProduct}]]".replace(/(&quot\;)/g, "\""));
+	function printMe(btn){
+		$('button').css('display','none');
+		window.print();
+		setTimeout(showBtn(),5000);
+	}
+	function showBtn(){
+		$('button').css('display','flex');
+	
+	}
+	
+	function paintGr(){
+		var id=$("#select").find(":selected").val();
+		var ar = new Array();
+		//продано
+		for(var i=0; i<prodanoProduct.length;i++){
+			var temp=prodanoProduct[i];
+			if(temp["productId"]==id){
+				ar.push([ '[[#{messages.description}]]', '[[#{messages.bought}]]']);
+				ar.push([ '[[#{messages.bought}]]',temp["count"]]);
+				ar.push(['[[#{messages.warhouses}]]',temp["warhouse"]]);
+			}
+		}		
+	    var data = google.visualization.arrayToDataTable(ar);
+	    var options = {
+	     title:'[[#{messages.bought}]]',
+	     is3D: true
+	    };	
+	    var chart3 = new google.visualization.PieChart(document.getElementById('oil3'));
+	     chart3.draw(data, options);
+		
+	     //закуплено
+	     ar = new Array();			
+			for(var i=0; i<requesterProduct.length;i++){
+				var temp=requesterProduct[i];
+				if(temp["productId"]==id){
+					ar.push([ '[[#{messages.description}]]', '[[#{messages.boughtMe}]]']);
+					ar.push([ '[[#{messages.boughtMe}]]',temp["count"]]);
+					ar.push(['[[#{messages.warhouses}]]',temp["warhouse"]]);
+				}
+			}		
+		    var data = google.visualization.arrayToDataTable(ar);
+		    var options = {
+		     title:'[[#{messages.boughtMe}]]',
+		     is3D: true
+		    };	
+		    var chart4 = new google.visualization.PieChart(document.getElementById('oil4'));
+		     chart4.draw(data, options);
+	}
+	
+</script>
+</body>
+</html>

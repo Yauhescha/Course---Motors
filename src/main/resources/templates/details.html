@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title th:text="#{messages.details}">Main</title>
+	
+	<div th:replace="~{commons :: head}"></div>
+</head>
+<body>
+
+<div th:replace="~{commons :: nav}"></div>
+
+<section class="productList">
+	<div class="container">
+		<h3 class="text-center" th:text="${product.name}">Products</h3>
+		<div class="d-flex flex-wrap justify-content-center">
+			<form action="/order" method="post">
+				<img th:src="'/file/'+${product.filename}" style="">
+				<div>
+					<div>
+						<span th:text="#{messages.price}+': '">Price: </span>
+						<p class="productPrice" th:text="${product.price}"></p>						
+					</div>
+					<div>
+						<span th:text="#{messages.quantity}+': '">Quantity: </span>
+						<p th:text="${product.quantity}"></p>
+					</div>
+					<div>
+						<span th:text="#{messages.description}+': '">Description: </span>
+						<p th:text="${product.description}"></p>
+					</div>
+					<div>
+						<span th:text="#{messages.category}+': '">Category: </span>
+						<p th:text="${product.category.name}"></p>
+					</div>
+					<div>
+						<span th:text="#{messages.producer}+': '">Producer: </span>
+						<p th:text="${product.producer.title}"></p>
+					</div>
+					<div>
+						<span th:text="#{messages.brands}+': '">Brand: </span>
+						<p th:text="${product.brand.name}"></p>
+					</div>
+					<div>
+						<span th:text="#{messages.count}+': '">Count: </span>
+						<p th:text="${count}"></p>
+					</div>
+					<div th:if="${count>0}">
+						<input type="number" min="1" required name="count" th:max="${count}">
+						<input type="number" th:value="${product.id}" name="productId" style="display: none">					
+						<button class="btn btn-primary" th:if="${#request.isUserInRole('MANAGER') or #request.isUserInRole('USER')}"  th:text="#{messages.buy}">In Bucket</button>
+					</div>
+				</div>
+			</form>			
+		</div>
+	</div>
+</section>
+
+
+
+</body>
+</html>

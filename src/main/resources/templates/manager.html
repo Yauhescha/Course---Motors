@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title  th:text="#{messages.managers}">Manager</title>
+	
+	<div th:replace="~{commons :: head}"></div>
+</head>
+
+<body onload="onLoad()">
+
+<div th:replace="~{commons :: nav}"></div>
+
+<form action="/manager" method="post">
+<section class="managerForm container">
+	<div class="row">
+		<div class="col">
+			  <div class="form-group">
+			    <label  th:text="#{messages.fio}">Name</label>
+			    <input id="fio" type="text" name="fio" class="form-control" required>
+			  </div>
+			  <div class="form-group">
+			   <label  th:text="#{messages.address}">Address</label>
+			    <input id="address" type="text"  name="address" class="form-control" required>
+			  </div>
+			  <div class="form-group">
+			    <label  th:text="#{messages.phone}">Phone</label>
+			    <input id="phone" type="text"  name="phone" class="form-control" required>
+			  </div>
+  			  <div class="form-group">
+			    <label th:text="#{messages.username}">Username</label>
+			    <input id="username" type="text"  name="username" class="form-control" required>
+			  </div>
+  			  <div class="form-group">
+			    <label th:text="#{messages.password}">Password</label>
+			    <input id="password" type="password"  name="password" class="form-control" required>
+			  </div>
+			  <button type="submit" class="btn btn-primary" th:text="#{messages.submit}">Submit</button>
+			  <button th:if="${managers}" type="submit" formaction="/manager/edit" class="btn btn-primary" th:text="#{messages.edit}">Edit</button>
+		
+		</div>
+	</div>
+</section>
+
+
+<section class="managerList">
+	<div class="container">
+		<h3 class="text-center" th:text="#{messages.managers}">Managers</h3>
+		<div class="d-flex flex-wrap justify-content-center">
+			<div th:id="'id'+${manager.id}" class="manager-item position-relative" th:each="manager:${managers}">
+				<input th:onclick="'make('+${manager.id}+')'"  type="radio" name="idd" th:value=${manager.id} th:text="#{messages.selectForEdit}" checked="checked">
+				<p id="fio" th:text="${manager.fio}"></p>
+				<p id="phone" th:text="${manager.phone}"></p>
+				<p id="address" th:text="${manager.address}"></p>
+				<p id="username" th:text="${manager.username}"></p>
+				<a th:href="'manager/remove/'+${manager.id}"  th:text="#{messages.remove}">remove</a>
+								
+			</div>
+		</div>
+	</div>
+</section>
+<script type="text/javascript">
+function make(id){
+	$(".col #fio").val($("section.managerList div#id"+id+" #fio").html());
+	$(".col #phone").val($("section.managerList div#id"+id+" #phone").html());
+	$(".col #address").val($("section.managerList div#id"+id+" #address").html());
+	$(".col #username").val($("section.managerList div#id"+id+" #username").html());
+}
+</script>
+
+</form>
+</body>
+</html>

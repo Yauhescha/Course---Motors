@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<div th:replace="~{commons :: head}"></div>
+</head>
+
+<body>
+
+<div th:replace="~{commons :: nav}"></div>
+<div class="container ">
+        <div class="row centered-form d-flex justify-content-center">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        	<div class="panel panel-default">
+        		<div class="panel-heading">
+			    		<h3 class="panel-title"  th:text="#{messages.regInto}">Please sign up  <small>It's free!</small></h3>
+			    		<select  th:onchange="'go(\''+@{|${#httpServletRequest.requestURI}?language=|}+'\')'" >
+							<option >Language</option>
+							<option value="en">EN</option>
+							<option value="ru">RU</option>
+						</select> 
+			 			</div>
+			 			<div class="panel-body">
+			    		<form role="form" action="/registration" method="post">
+			    			<div class="row">
+			    				<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="form-group">
+			                			<input type="text" name="fio" id="first_name" class="form-control input-sm" placeholder="FIO" required>
+			    					</div>
+			    				</div>
+			    				<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="form-group">
+			    						<input type="text" name="address" id="last_name" class="form-control input-sm" placeholder="Address" required>
+			    					</div>
+			    				</div>
+			    			</div>
+
+			    			<div class="form-group">
+			    				<input type="text" name="phone" id="phone" class="form-control input-sm" placeholder="Phone" required>
+			    			</div>
+			    			
+							<div class="form-group">
+			    				<input type="text" name="username" id="login" class="form-control input-sm" placeholder="Username" required>
+			    			</div>
+			    			
+	    					<div class="form-group">
+	    						<input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password" required>
+	    					</div>
+			    				
+			    				
+			    			</div>
+			    			
+			    			<input type="submit" value="Register" class="btn btn-info btn-block">
+			    		
+			    		</form>
+			    	</div>
+	    		</div>
+    		</div>
+    	</div>
+    </div>
+    <script type="text/javascript">
+	function go(url){
+		window.location.href =url+$("select").val();
+	}
+	</script>
+</body>
+
+</html>

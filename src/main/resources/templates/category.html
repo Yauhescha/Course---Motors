@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title th:text="#{messages.categories}">Category</title>
+	
+	<div th:replace="~{commons :: head}"></div>
+</head>
+
+<body onload="onLoad();">
+
+<div th:replace="~{commons :: nav}"></div>
+
+<form action="/category" method="post">
+<section class="categoryForm container">
+	<div class="row">
+		<div class="col">
+			  <div class="form-group">
+			    <label  th:text="#{messages.name}">Name</label>
+			    <input type="text" name="name" class="form-control" required>
+			  </div>			  
+			  <button type="submit" class="btn btn-primary"  th:text="#{messages.submit}">Submit</button>
+			  <button th:if="${categories}" type="submit" formaction="/category/edit" class="btn btn-primary" th:text="#{messages.edit}">Edit</button>
+		</div>
+	</div>
+</section>
+
+
+<section class="categoryList">
+	<div class="container">
+		<h3 class="text-center"  th:text="#{messages.categories}">Categories</h3>
+		<div class="d-flex flex-wrap justify-content-center">
+
+			<div class="category-item position-relative" th:each="category:${categories}">
+			<input type="radio" name="idd" th:value=${category.id} th:text="#{messages.selectForEdit}" checked="checked">
+				<p th:text="${category.name}"></p>
+				<a th:href="'category/remove/'+${category.id}"  th:text="#{messages.remove}">remove</a>
+								
+			</div>
+		</div>
+	</div>
+</section>
+</form>
+
+</body>
+</html>

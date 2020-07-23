@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title th:text="#{messages.product}">Product</title>
+	
+	<div th:replace="~{commons :: head}"></div>
+</head>
+
+<body onload="onLoad()">
+
+<div th:replace="~{commons :: nav}"></div>
+
+<form action="/product" method="post" enctype="multipart/form-data">
+<section class="productForm container">
+	<div class="row">
+		<div class="col">
+			  <div class="form-group">
+			    <label th:text="#{messages.name}">Name</label>
+			    <input id="name" type="text" name="name" class="form-control" required>
+			    <button type="submit" formaction="/product/findByName" formnovalidate class="btn btn-primary" th:text="#{messages.findByThisField}">Find</button>
+			  </div>
+			  
+			  <div class="form-group">
+			    <label th:text="#{messages.price}">Price</label>
+			    <input id="price" type="number"  name="price" class="form-control" required>
+			    <button type="submit" formaction="/product/findByPrice" formnovalidate class="btn btn-primary" th:text="#{messages.findByThisField}">Find</button>
+			  </div>
+			  
+			  <div class="form-group">
+			   <label th:text="#{messages.quantity}">Quantity:</label>
+			    <input id="quantity" type="number"  name="quantity" class="form-control" required>
+			    <button type="submit" formaction="/product/findByQuantity" formnovalidate class="btn btn-primary" th:text="#{messages.findByThisField}">Find</button>
+			  </div>
+			  
+  			  <div class="form-group">
+			   <label th:text="#{messages.description}">Description::</label>
+			    <input id="description" type="text"  name="description" class="form-control" required>
+			    <button type="submit" formaction="/product/findByDescription" formnovalidate class="btn btn-primary" th:text="#{messages.findByThisField}">Find</button>
+			  </div>
+			  <div class="form-group">
+			   <label th:text="#{messages.image}">Image:</label>
+			    <input type="file"  name="file" class="form-control" required>
+			  </div>
+			  
+			  <div class="form-group required">
+				<label class="col-sm-2 control-label" th:text="#{messages.category}">Category</label>
+					<select id="catName" name="categoryId" size="1"  class="form-control" required>
+						<option th:each="categ:${categories}" th:value="${categ.id}" th:text="${categ.name}">categ</option>
+					</select>
+					<button type="submit" formaction="/product/findByCategory" formnovalidate class="btn btn-primary" th:text="#{messages.findByThisField}">Find</button>
+				</div>
+				
+				<div class="form-group required">
+				<label class="col-sm-2 control-label"  th:text="#{messages.producer}">Producer</label>
+					<select id="prodName" name="producerId" size="1"  class="form-control" required>
+						<option th:each="producer:${producers}" th:value="${producer.id}" th:text="${producer.title}">producer</option>
+					</select>
+					<button type="submit" formaction="/product/findByProducer" formnovalidate class="btn btn-primary" th:text="#{messages.findByThisField}">Find</button>
+				</div>
+				
+				<div class="form-group required">
+				<label class="col-sm-2 control-label" th:text="#{messages.brand}">Brand</label>
+					<select id="brandName" name="brandId" size="1"  class="form-control" required>
+						<option th:each="brand:${brands}" th:value="${brand.id}" th:text="${brand.name}">brand</option>
+					</select>
+					<button type="submit" formaction="/product/findByBrand" formnovalidate class="btn btn-primary" th:text="#{messages.findByThisField}">Find</button>
+				</div>
+					
+			  <button type="submit" class="btn btn-primary" th:text="#{messages.submit}">Submit</button>
+			  <button th:if="${products}" type="submit" formaction="/product/edit" class="btn btn-primary" th:text="#{messages.edit}">Edit</button>
+		</div>
+	</div>
+</section>
+
+
+<section class="productList">
+	<div class="container">
+		<h3 class="text-center" th:text="#{messages.products}">Products</h3>
+		<div class="d-flex flex-wrap justify-content-center">
+			<div th:id="'id'+${product.id}" class="product-item position-relative" th:each="product:${products}">
+				<img th:src="'/file/'+${product.filename}" style="width:300px;height: 300px">
+				<input th:onclick="'make('+${product.id}+')'"  type="radio" name="idd" th:value=${product.id} th:text="#{messages.selectForEdit}" checked="checked">
+				<div class="form-group">
+				   <label th:text="#{messages.name}"></label>
+					<p id="name" class="productName" th:text="${product.name}"></p>
+				</div>
+				<div class="form-group">
+				   <label th:text="#{messages.price}"></label>
+					<p id="price" class="productPrice" th:text="${product.price}"></p>
+				</div>
+				<div class="form-group">
+				   <label th:text="#{messages.quantity}"></label>
+					<p id="quantity" th:text="${product.quantity}"></p>
+				</div>
+				<div class="form-group">
+				   <label th:text="#{messages.description}"></label>
+					<p id="description" th:text="${product.description}"></p>
+				</div>
+				<div class="form-group">
+				   <label th:text="#{messages.category}"></label>
+					<p id="catName" th:text="${product.category.name}"></p>
+				</div>
+				<div class="form-group">
+				   <label th:text="#{messages.brand}"></label>
+					<p id="brandName" th:text="${product.brand.name}"></p>
+				</div>
+				<div class="form-group">
+				   <label th:text="#{messages.producer}"></label>
+					<p id="prodName" th:text="${product.producer.title}"></p>
+				</div>
+				<a class="btn btn-danger"  th:href="'product/remove/'+${product.id}" th:text="#{messages.remove}">remove</a>								
+			</div>
+		</div>
+	</div>
+</section>
+<script type="text/javascript">
+function make(id){
+	$(".col #name").val($("section.productList div#id"+id+" #name").html());
+	$(".col #price").val($("section.productList div#id"+id+" #price").html());
+	$(".col #quantity").val($("section.productList div#id"+id+" #quantity").html());
+	$(".col #description").val($("section.productList div#id"+id+" #description").html());
+	$('.col #catName option:contains("'+$("section.productList div#id"+id+" #catName").html()+'")').prop('selected', true);
+	$('.col #prodName option:contains("'+$("section.productList div#id"+id+" #prodName").html()+'")').prop('selected', true);
+	$('.col #brandName option:contains("'+$("section.productList div#id"+id+" #brandName").html()+'")').prop('selected', true);
+}
+</script>
+</form>
+</body>
+</html>

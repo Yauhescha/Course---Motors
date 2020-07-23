@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title th:text="#{messages.orders}">Order</title>
+	
+	<div th:replace="~{commons :: head}"></div>
+</head>
+
+<body onload="onLoad()">
+
+<div th:replace="~{commons :: nav}"></div>
+
+
+<section class="list">
+	<div class="container">
+		<h3 class="text-center"  th:text="#{messages.basket}">Basket</h3>
+		<a class="btn btn-danger d-flex justify-content-center" th:unless="${#lists.isEmpty(current)}" th:href="'order/buy/'+${current[0].id}"  th:text="#{messages.buy}">Buy</a>
+		<div th:unless="${#lists.isEmpty(current)}" th:text="'price '+${current[0].price}"></div>
+		<div class="d-flex flex-wrap justify-content-center">
+			<div class="d-flex" th:each="order:${current}">
+				<div class="item position-relative" th:each="OrdersProduct:${order.products}">
+					<img th:src="'/file/'+${OrdersProduct.filename}" style="width:200px;height: 200px">
+					<p th:text="${OrdersProduct.productName}"></p>
+					<p th:text="#{messages.count}+': '+${OrdersProduct.Quantity}"></p>
+					<a class="btn btn-danger"  th:href="'order/remove/'+${OrdersProduct.id}"  th:text="#{messages.remove}">remove</a>								
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="list">
+	<div class="container">
+		<h3 class="text-center"  th:text="#{messages.ordersBefore}">Orders before</h3>
+		<div class="d-flex flex-wrap justify-content-center">
+
+			<div class="d-flex" th:each="order:${ended}">
+				<div class="item position-relative" th:each="OrdersProduct:${order.products}">
+					<form action="order/return" method="post">
+						<input type="number" th:value="${OrdersProduct.id}" hidden name="orderProductId">
+						<img th:src="'/file/'+${OrdersProduct.filename}" style="width:200px;height: 200px">
+						<p th:text="${OrdersProduct.productName}"></p>
+						<p th:text="#{messages.count}+': '+${OrdersProduct.Quantity}"></p>
+						<button type="submit" th:text="#{messages.return}"></button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="list">
+	<div class="container">
+		<h3 class="text-center" th:text="#{messages.ordersWait}">Orders wait moderator</h3>
+		<div class="d-flex flex-wrap justify-content-center">
+
+			<div class="d-flex" th:each="order:${wait}">
+				<div class="item position-relative" th:each="OrdersProduct:${order.products}">
+					<img th:src="'/file/'+${OrdersProduct.filename}" style="width:200px;height: 200px">
+					<p th:text="${OrdersProduct.productName}"></p>
+					<p th:text="#{messages.count}+': '+${OrdersProduct.Quantity}"></p>						
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+</body>
+</html>

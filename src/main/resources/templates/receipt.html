@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title th:text="#{messages.orders}">Order</title>
+	
+	<div th:replace="~{commons :: head}"></div>
+</head>
+
+<body  onload="makeDate()">
+
+<div th:replace="~{commons :: nav}"></div>
+
+
+<section class="list">
+	<div class="container">
+		<h3 class="text-center"  th:text="#{messages.receipt}">Receipt</h3>
+		<div class="form">
+			<form action="/receipt/find" class="d-flex flex-column">
+				<div class="d-flex justify-content-center">
+					<div>
+						<label th:text="#{messages.from}">From</label>
+						<input id="date" type="date" name="from" >
+					</div>
+					<div>
+						<label th:text="#{messages.to}">From</label>
+						<input id="date" type="date" name="to">
+					</div>
+					<button class="item btn btn-primary" th:text="#{messages.findByDate}" style="margin: 0 0 0 30px;">Find</button>
+				</div>
+				<div class="d-flex justify-content-center mt-2">
+					<select name="id">
+						<option th:each="user:${users}" th:text="${user.fio}" th:value="${user.id}"></option>
+					</select>
+					<button formaction="/receipt/findUser" class="item btn btn-primary" th:text="#{messages.findByDateAndUser}" style="margin: 0 0 0 30px;">Find</button>
+				</div>
+			</form>		
+		</div>
+		<div class="d-flex flex-wrap justify-content-center">
+			<table border="2" style="width: 100%" id="myTable2">
+				<tr>
+					<th onclick="sortTable(0)" th:text="#{messages.fio}">
+					<th onclick="sortTable(1)" th:text="#{messages.address}">				
+					<th onclick="sortTable(2)" th:text="#{messages.date}">
+					<th onclick="sortTable(3)" th:text="#{messages.price}">
+					<th onclick="sortTable(4)" th:text="#{messages.details}">
+				</tr>
+				<div th:each="order:${list}">
+					<tr>
+						<td th:text="${order.user.fio}"></td>
+						<td th:text="${order.user.address}"></td>
+						<td th:text="${order.date}"></td>
+						<td th:text="${order.price}"></td>
+						<td><button th:text="#{messages.details}" th:onclick="'showMe('+${order.id}+')'"></button></td>
+					</tr>
+					<tr th:class="'idOrder'+${order.id}+' d-none'">
+						<td colspan="5">
+							<table  border="1" style="width: 100%">
+								<tr>
+									<th th:text="#{messages.name}">
+									<th th:text="#{messages.quantity}">				
+									<th th:text="#{messages.price}">
+									<th th:text="#{messages.allPrice}">
+								</tr>
+								<tr th:each="product:${order.products}" >
+									<td th:text="${product.productName}"></td>
+									<td th:text="${product.Quantity}"></td>
+									<td th:text="${product.price}"></td>
+									<td th:text="${product.price}*${product.Quantity}"></td>								
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</div>
+			</table>
+			<div class="d-flex mt-3">
+				<button th:text="#{messages.print}" onclick="printMe()"></button>
+			</div>
+		
+		</div>
+	</div>
+</section>
+<script type="text/javascript">
+	function showMe(id){
+		$(".idOrder"+id).toggleClass("d-none");
+	}
+	function printMe(){
+		$('button').toggleClass("d-none");
+		$('nav').toggleClass("d-none");
+		$('.form').toggleClass("d-none");
+		window.print();
+		setTimeout(showBtn(),10000);
+	}
+	function showBtn(){
+		$('.form').toggleClass("d-none");
+		$('nav').toggleClass("d-none");
+		$('button').toggleClass("d-none");
+	}
+	function makeDate(){
+		var now = new Date();
+		var dt=now.getFullYear()+'-'+("0"+(now.getMonth()+1)).slice(-2)+'-'+("0"+(now.getDate())).slice(-2);
+		$('input#date').each( function () {
+			$(this).val(dt);
+			
+		});
+		}
+</script>
+</body>
+</html>

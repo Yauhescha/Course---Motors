@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head >
+<meta th:fragment="head">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/main.css">
+    <script th:inline="javascript">
+	function onLoad(){
+		var tem=[[${response1}]];
+		if(tem!=null)
+			if(tem.length>0){
+		  		$('#startModal').trigger('click');
+		  		setTimeout(closeModal,1500);
+			}
+	}
+	function closeModal(){
+		$('#notification > div > div > div.modal-header > button > span').trigger('click');
+	}
+	</script>
+</meta>
+</head>
+<body>
+
+
+
+<header th:fragment="nav">
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary border-bottom border-secondary" >
+		<a class="navbar-brand nav-item " href="/?language=ru"  >
+			<div>
+				<img src="/file/logo.png" style="height: 36px; width: 36px">
+				<label th:text="#{messages.home}">Home</label>
+			</div> 
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"	data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+			<div class="navbar-nav" th:if="${#request.userPrincipal != null}">
+			<button type="nav-item nav-link" onclick="history.back();" th:text="#{messages.back}"  style="text-decoration: none;border: none;background: transparent;color: white;"></button>
+				 <li class="nav-item dropdown">
+			        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  th:text="#{messages.categories}">
+			          Categories
+			        </a>
+			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">			        
+			          <a class="dropdown-item" th:each="cat:${categories}" th:href="'/cat'+${cat.id}" th:text="${cat.name}">Action</a>	
+			        </div>
+			      </li>
+				 <li class="nav-item dropdown">
+			        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  th:text="#{messages.brands}">
+			          Brands
+			        </a>
+			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">			         
+			          <a class="dropdown-item" th:each="brand:${brands}" th:href="'/bran'+${brand.id}" th:text="${brand.name}">Another action</a>
+			          
+			        </div>
+			      </li>
+				<a class="nav-item nav-link nav-item " href="/order" th:if="${#request.isUserInRole('MANAGER') or #request.isUserInRole('USER')}"  th:text="#{messages.basket}">Basket</a>
+				<a class="nav-item nav-link nav-item " href="/ordersModer" th:if="${#request.isUserInRole('MANAGER') or #request.isUserInRole('ADMIN')}"  th:text="#{messages.orders}">Orders(manger)</a>
+				
+				<li class="nav-item dropdown" th:if="${#request.isUserInRole('MANAGER') or #request.isUserInRole('ADMIN')}">
+			        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  th:text="#{messages.lists}">
+			          Lists
+			        </a>
+			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">			         						
+						<a class="dropdown-item" href="/category"  th:text="#{messages.categories}">Category</a>
+						<a class="dropdown-item" href="/brand"  th:text="#{messages.brands}">Brand</a>
+						<a class="dropdown-item" href="/product"   th:text="#{messages.products}">Products</a>
+			        </div>
+			      </li>
+			       <li class="nav-item dropdown">
+			        <a class="nav-link dropdown-toggle "id="navbarDropdown"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"   th:text="#{messages.adminList}"   th:if="${#request.isUserInRole('ADMIN')}">
+			          Admin list
+			        </a>
+			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">			        
+						<a class="dropdown-item" href="/producer" th:text="#{messages.producers}">Producer</a>
+						<a class="dropdown-item" href="/manager"  th:text="#{messages.managers}">Managers</a>
+						<a class="dropdown-item" href="/user"  th:text="#{messages.users}">Users</a>
+						<a class="dropdown-item" href="/reports" th:text="#{messages.reports}">Reports</a>
+						<a class="dropdown-item" href="/receipt" th:text="#{messages.receipt}">Receipt</a>
+						<a class="dropdown-item" href="/chart" th:text="#{messages.chart}">Chart</a>
+			        </div>
+			      </li>
+<!-- 				th:if="${#request.isUserInRole('MANAGER') or #request.isUserInRole('ADMIN')}" -->
+				<a class="nav-item nav-link nav-item " href="/request" th:if="${#request.isUserInRole('MANAGER') or #request.isUserInRole('ADMIN')}"   th:text="#{messages.requests}">Request</a>
+				<li class="nav-item dropdown">
+			        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  th:text="#{messages.language}">
+			          Language
+			        </a>
+			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">			         
+						<a class="dropdown-item" th:href="@{|${#httpServletRequest.requestURI}?language=ru|}"  th:text="#{messages.russian}">RU</a>
+						<a class="dropdown-item" th:href="@{|${#httpServletRequest.requestURI}?language=us|}"  th:text="#{messages.english}">US</a>
+			        </div>
+			      </li>
+			      <a class="nav-item nav-link" href="/priceList" th:text="#{messages.priceList}">PriceList</a> 
+				<a class="nav-item nav-link" href="/logout?language=ru" th:text="#{messages.logout}">LogOut</a> 
+			</div>
+			<div class="navbar-nav" th:if="${#request.userPrincipal == null}">
+				<a class="nav-item nav-link" href="/login" th:text="#{messages.login}">LogIn</a>
+				<a class="nav-item nav-link" href="/registration" th:text="#{messages.singin}">SingIn</a>
+			</div>
+		</div>
+	</nav>
+	<script type="text/javascript">
+	function me () {
+		 var url = "/"+window.location.href.substr( window.location.href.lastIndexOf( '/' ) + 1 );
+		 $( '.nav-item ' ).each( function () {
+			 if( $( this ).attr( 'href' ) === url || $( this ).attr( 'href' ) === '' ) {
+				 $( this ).addClass( 'active' );
+			 }
+		 });
+		}
+	me();
+	</script>
+<button id="startModal" hidden="" type="button" class="btn btn-primary" data-toggle="modal" data-target="#notification"></button>
+<div class="modal" tabindex="-1" role="dialog" id="notification">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Notification</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p th:text="${response1}">Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+</header>
+
+</body>
+</html>

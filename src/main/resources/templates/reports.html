@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title th:text="#{messages.reports}">Main</title>
+	
+	<div th:replace="~{commons :: head}"></div>
+</head>
+<body onload="makeDate()">
+
+<div th:replace="~{commons :: nav}"></div>
+
+<section class="List" style="border-bottom: 1px solid black">
+	<div class="container">
+		<h3 class="text-center" th:text="#{messages.income}">Income</h3>
+		<div class="d-flex flex-wrap justify-content-center">
+			<form action="/reports/findP" class="d-flex justify-content-between">
+				<div>
+					<label th:text="#{messages.from}">From</label>
+					<input id="date" type="date" name="from" >
+				</div>
+				<div>
+					<label th:text="#{messages.to}">From</label>
+					<input id="date" type="date" name="to">
+				</div>
+				<button class="item btn btn-primary" th:text="#{messages.find}" style="margin: 0 0 0 30px;">Find</button>
+			</form>			
+		</div>
+	</div>
+</section>
+<section class="List" style="border-bottom: 1px solid black">
+	<div class="container">
+		<h3 class="text-center" th:text="#{messages.expenses}">Expenses</h3>
+		<div class="d-flex flex-wrap justify-content-center">
+			<form action="/reports/findM" class="d-flex justify-content-between">
+				<div>
+					<label th:text="#{messages.from}">From</label>
+					<input id="date" type="date" name="from" >
+				</div>
+				<div>
+					<label th:text="#{messages.to}">From</label>
+					<input id="date" type="date" name="to">
+				</div>
+				<button class="item btn btn-primary" type="submit" th:text="#{messages.find}" style="margin: 0 0 0 30px;">Days</button>
+			</form>
+		</div>
+	</div>
+</section>
+<section class="List" style="border-bottom: 1px solid black">
+	<div class="container">
+		<h3 class="text-center" th:text="#{messages.warhouses}">Warhouses</h3>
+		<div class="justify-content-center">
+			<div class="item position-relative d-flex justify-content-between" th:each="warhouse:${warhouses}">
+				<p class="product" th:text="${warhouse.productName}"></p>
+				<p class="count" th:text="${warhouse.count}"></p>
+			</div>
+		</div>
+	</div>
+</section>
+<script type="text/javascript">
+	function makeDate(){
+		var now = new Date();
+		var dt=now.getFullYear()+'-'+("0"+(now.getMonth()+1)).slice(-2)+'-'+("0"+(now.getDate())).slice(-2);
+		$('input#date').each( function () {
+			$(this).val(dt);
+			
+		});
+		}
+</script>
+</body>
+</html>
